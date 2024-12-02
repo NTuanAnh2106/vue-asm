@@ -79,12 +79,9 @@ const logout = () => {
   }
 };
 
-const updateUser = (email, newData) => {
-  const index = users.findIndex((user) => user.email === email);
-  if (index !== -1) {
-    users[index] = { ...users[index], ...newData };
-    localStorage.setItem("users", JSON.stringify(users));
-  }
+const updateUser = () => {
+  localStorage.setItem("currentUser", JSON.stringify(users.value));
+  showToastSuccess("Update success");
 };
 </script>
 
