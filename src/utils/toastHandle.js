@@ -1,5 +1,4 @@
 import Toast from "@/utils/toast";
-import Swal from "sweetalert2";
 
 export const showToastInfo = (message, text) => {
   Toast.fire({
@@ -31,23 +30,4 @@ export const showToastWarning = (message, text) => {
     title: message,
     text: text,
   });
-};
-
-export const showToastLoading = (message, timer) => {
-  Toast.fire({
-    icon: "info",
-    title: message,
-    timer: timer,
-    showConfirmButton: false,
-    allowOutsideClick: false,
-    didOpen: (toast) => {
-      Swal.showLoading();
-      toast.onmouseenter = Swal.stopTimer;
-      toast.onmouseleave = Swal.resumeTimer;
-    },
-  });
-};
-
-export const closeToastLoading = () => {
-  Swal.close();
 };

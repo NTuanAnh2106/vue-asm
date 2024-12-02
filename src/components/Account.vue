@@ -12,25 +12,42 @@
         </aside>
         <article class="col-sm-8 text-white fs-4">
           <div>
-            <form action="">
+            <form action="" @submit.prevent="updateUser">
               <div class="row d-flex">
-                <label for="" class="col-2">Họ và tên :</label>
-                <p class="col-sm-6">Nguyễn Tuấn Anh</p>
+                <label for="" class="col-3">Họ và tên :</label>
+                <input
+                  type="text"
+                  class="col-sm-6 form-control"
+                  v-model="users.fullName"
+                />
               </div>
               <div class="row d-flex">
-                <label for="" class="col-2">Email :</label>
-                <p class="col-sm-6">@gmail.com</p>
+                <label for="" class="col-3">Email :</label>
+                <input
+                  type="email"
+                  class="col-sm-6 form-control"
+                  v-model="users.email"
+                />
               </div>
               <div class="row d-flex">
-                <label for="" class="col-2">Số đt :</label>
-                <p class="col-sm-6">0898235534</p>
+                <label for="" class="col-3">Số đt :</label>
+                <input
+                  type="text"
+                  class="col-sm-6 form-control"
+                  v-model="users.phone"
+                />
               </div>
-              <div class="row d-flex">
-                <label for="" class="col-2">Địa chỉ :</label>
-                <p class="col-sm-6">Thành phố Hồ Chí Minh</p>
+              <div class="row mt-3">
+                <button type="submit" class="btn btn-primary">Lưu</button>
+                <button
+                  type="button"
+                  class="btn btn-secondary ms-2"
+                  @click="logout"
+                >
+                  Đăng xuất
+                </button>
               </div>
             </form>
-            <button type="button" class="fs-6 btn btn-primary">Change</button>
           </div>
         </article>
       </div>
@@ -41,22 +58,32 @@
 <script setup>
 import { RouterLink, useRouter } from "vue-router";
 import { onMounted, ref } from "vue";
+import { showToastSuccess } from "@/utils/toastHandle";
 
-const users = ref([]);
+const users = ref({});
 const getUserFromLocalStorage = () => {
-  const currentUser = JSON.parse(localStorage.getItem("currentUser")) || [];
+  const currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
   users.value = currentUser;
-  console.log(users.value);
 };
+
 onMounted(() => {
   getUserFromLocalStorage();
 });
+
 const router = useRouter();
 const logout = () => {
   const confirmLogout = confirm("Bạn có muốn đăng xuất không ?");
   if (confirmLogout) {
-    localStorage.removeItem("fullName");
+    localStorage.removeItem("currentUser");
     router.push("/");
+  }
+};
+
+const updateUser = (email, newData) => {
+  const index = users.findIndex((user) => user.email === email);
+  if (index !== -1) {
+    users[index] = { ...users[index], ...newData };
+    localStorage.setItem("users", JSON.stringify(users));
   }
 };
 </script>
